@@ -1,0 +1,11 @@
+# iAnchor 核心依赖 (card 模式开箱即用)
+edge-tts
+gradio
+pyyaml
+matplotlib
+pillow
+numpy
+scipy
+requests
+openai
+moviepy

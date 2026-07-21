@@ -1,0 +1,33 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "CLAUDE.md"
+  ],
+  "plugin": [
+    "./.opencode/plugin/enforce-skills.ts"
+  ],
+  "permission": {
+    "edit": "allow",
+    "write": "ask",
+    "bash": {
+      "git *": "deny",
+      "*": "allow"
+    },
+    "task": "allow",
+    "skill": "allow",
+    "webfetch": "allow",
+    "question": "allow",
+    "todowrite": "allow"
+  },
+  "mcp": {
+    "playwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp"
+      ],
+      "enabled": true
+    }
+  }
+}

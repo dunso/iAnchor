@@ -1,0 +1,112 @@
+# ============================================================
+# iAnchor Pipeline 配置文件
+# ============================================================
+
+# ---- 路径 ----
+paths:
+  output_dir: "./output"
+  musetalk_dir: "~/code/git-hub/dunso/musetalk-mac"
+
+# ---- LLM 模块 ----
+# DEEPSEEK_API_KEY 通过环境变量设置: export DEEPSEEK_API_KEY="sk-xxx"
+llm:
+  provider: "deepseek"
+  model: "deepseek-v4-pro"
+  deepseek_api_base: "https://api.deepseek.com"
+  deepseek_api_key: "你的DeepSeek_API_KEY"
+  ollama_api_base: "http://localhost:11434"
+  ollama_model: "qwen2.5:7b"           # WebUI 选「本地 Ollama」时使用的模型
+  temperature: 0.3
+  max_tokens: 16384
+  system_prompt: '你是一位资深财经记者。把输入的股票信息改写成简洁克制的口播稿。
+
+      要求：平实冷静、信息密度高、不堆砌形容词、不喊口号。JSON 格式输出。
+
+      ⚠️数字保持阿拉伯数字格式（如"¥150.25"），不要转换为中文数字（如"一百五十点二五"）。
+
+      '
+
+# ---- TTS 模块 ----
+tts:
+  provider: "edge_tts"               # edge_tts | bark
+  edge_voice: "zh-CN-YunyangNeural"  # 男声新闻 | zh-CN-XiaoxiaoNeural 女声
+  edge_speed: "+10%"
+  bark_voice: "v2/zh_speaker_8"
+  speed: 1.3
+
+# ---- 可视化动画模块 ----
+visualization:
+  mode: "card"                  # card(PPT卡片) | sd(MLX文生图) | manim(数字动画) | remotion(React动画)
+  width: 1080
+  height: 480
+  fps: 30
+  bg_color: "#1a1a2e"
+  text_color: "#e0e0e0"
+  accent_color: "#ffb74d"
+  candle_width: 0.6
+  color_up: "#ef5350"
+  color_down: "#26a69a"
+  font_family: PingFang SC
+  font_size_label: 24
+  font_size_title: 36
+  font_size_value: 28
+  style: dark_background
+
+# ---- 数字人驱动模块 ----
+avatar:
+  provider: "musetalk"
+  fallback_image_mode: true
+
+# ---- 主播形象 AI 生成 (WebUI「AI 生成」形象来源) ----
+avatar_gen:
+  provider: "mflux"            # mflux(本地 MLX 推理) | api(云端文生图 API), 二选一, 不自动降级
+  # -- 本地 mflux: uv tool install --upgrade mflux --
+  mflux_command: "mflux-generate-z-image-turbo"
+  mflux_model: "filipstrand/Z-Image-Turbo-mflux-4bit"   # 预量化 4bit (~7GB); 全精度用 Tongyi-MAI/Z-Image-Turbo (~31GB, 配 mflux_quantize: 8)
+  mflux_quantize: null         # 4 | 8, 使用预量化模型时留空
+  mflux_steps: 9
+  # -- 云端 API: OpenAI images/generations 兼容 (SiliconFlow / 智谱 等) --
+  api_base: "https://api.siliconflow.cn/v1"
+  api_key: ""                  # 或环境变量 IMAGE_API_KEY / SILICONFLOW_API_KEY
+  api_model: "black-forest-labs/FLUX.1-schnell"
+  # -- 通用 --
+  width: 720                   # 高清可改 1080
+  height: 1280                 # 高清可改 1920 (本地生成更慢)
+  timeout: 900
+  prompt_llm: true             # 用 LLM 根据文案设计主播人设; false 则用固定模板
+
+# ---- 字幕模块 ----
+subtitle:
+  font: "STHeiti Medium"
+  font_size: 44
+  font_color: "#FFD700"       # 金黄
+  stroke_color: "#1a1a2e"
+  stroke_width: 3
+  bottom_margin: 0.22
+  max_chars_per_line: 24
+  position: bottom
+
+# ---- 视频合成模块 ----
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  viz_height_ratio: 0.2
+  avatar_height_ratio: 1.0
+  subtitle_height_ratio: 0.08
+  margin_top: 130
+  margin_bottom: 160
+  codec: "libx264"
+  bitrate: "8M"
+  audio_codec: "aac"
+  audio_bitrate: "192k"
+
+# ---- Pipeline 控制 ----
+pipeline:
+  skip_llm: false
+  skip_tts: false
+  skip_visualization: false
+  skip_avatar: false
+  skip_subtitle: false
+  keep_intermediates: true
+  open_on_complete: false

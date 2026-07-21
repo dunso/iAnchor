@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iAnchor — AI Video Generation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e); color: #e0e0e0; line-height: 1.7; }
+    .hero { text-align: center; padding: 100px 20px 60px; }
+    .hero h1 { font-size: 56px; font-weight: 900; background: linear-gradient(135deg, #667eea, #ffb74d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; }
+    .hero p { font-size: 20px; color: #aaa; max-width: 600px; margin: 0 auto 32px; }
+    .hero .badge { display: inline-block; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 18px; margin: 4px; font-size: 14px; color: #ccc; }
+    .hero .btn { display: inline-block; margin-top: 32px; padding: 14px 36px; font-size: 18px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .hero .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(102,126,234,0.4); }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+    section { padding: 60px 0; }
+    h2 { font-size: 32px; text-align: center; margin-bottom: 40px; color: #ffb74d; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-4px); border-color: rgba(102,126,234,0.4); }
+    .card .icon { font-size: 36px; margin-bottom: 12px; }
+    .card h3 { font-size: 18px; margin-bottom: 8px; color: #fff; }
+    .card p { font-size: 14px; color: #999; }
+    .screenshot { text-align: center; margin: 40px 0; }
+    .screenshot img { max-width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .pipeline { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 32px 0; }
+    .pipe { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: #ccc; text-align: center; }
+    .pipe .arrow { color: #667eea; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px 16px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    th { color: #ffb74d; font-weight: 600; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 32px 0; }
+    .step { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+    .step .num { width: 36px; height: 36px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 8px; }
+    footer { text-align: center; padding: 40px 20px; color: #555; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.05); }
+    code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+    .code-block { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; overflow-x: auto; margin: 16px 0; font-family: "SF Mono", "Fira Code", monospace; font-size: 13px; color: #a8d8a8; }
+  </style>
+</head>
+<body>
+
+<div style="text-align:right;padding:16px 24px 0">
+  <a href="index.html" style="color:#999;text-decoration:none;margin-right:12px">中文</a>
+  <a href="index_en.html" style="color:#ffb74d;font-weight:700;text-decoration:none">English</a>
+</div>
+
+<div class="hero">
+  <h1>🎬 iAnchor</h1>
+  <p>Turn a topic + data into a vertical video with digital human, subtitles, and animated cards — in 3 minutes. Zero editing skills.</p>
+  <div>
+    <span class="badge">🍎 macOS M1-M4</span>
+    <span class="badge">🐍 Python 3.13</span>
+    <span class="badge">🤖 DeepSeek LLM</span>
+    <span class="badge">🗣️ Edge TTS</span>
+    <span class="badge">👄 MuseTalk Lip Sync</span>
+    <span class="badge">🧑 AI Avatar Gen</span>
+  </div>
+  <a href="https://github.com/dunso/iAnchor" class="btn">⭐ Star on GitHub</a>
+</div>
+
+<div class="container">
+
+<section>
+  <div class="screenshot">
+    <img src="webui.png" alt="iAnchor WebUI">
+  </div>
+</section>
+
+<section>
+  <h2>✨ Why iAnchor?</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">✍️</div>
+      <h3>AI Scripting</h3>
+      <p>Topic + data in, fluent narration out. Cloud API or local Ollama, your choice.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🗣️</div>
+      <h3>Natural Voice</h3>
+      <p>Microsoft Edge TTS with 16 voices. Smooth, natural pronunciation.</p>
+    </div>
+    <div class="card">
+      <div class="icon">👄</div>
+      <h3>Lip Sync</h3>
+      <p>MuseTalk audio-driven. Mouth movements precisely match speech.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>Dynamic Cards</h3>
+      <p>Data, charts, and text auto-switch with narration. 4 animation engines to choose from.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📝</div>
+      <h3>Sentence Subtitles</h3>
+      <p>Gold text on rounded pill background. Split by punctuation. One per sentence.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧑</div>
+      <h3>AI Anchor Avatar</h3>
+      <p>No photo needed — generate an HD anchor portrait from your script. Local Z-Image-Turbo or cloud API, manual upload also supported.</p>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>Fully Automatic</h3>
+      <p>Script → TTS → Lip Sync → Cards → Subtitles → Final Video. One click, full pipeline.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>🔄 Pipeline</h2>
+  <div class="pipeline">
+    <div class="pipe">📄 Input</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🤖 Script</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🧑 Avatar</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🗣️ TTS</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">👄 Lip Sync</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🎨 Compose</div>
+  </div>
+</section>
+
+<section>
+  <h2>🎨 Animation Modes</h2>
+  <table>
+    <tr><th>Mode</th><th>Style</th><th>Best For</th></tr>
+    <tr><td><b>card</b></td><td>PPT cards, 6 layouts</td><td>Data broadcast</td></tr>
+    <tr><td><b>manim</b></td><td>Number animation + transitions</td><td>Premium feel</td></tr>
+    <tr><td><b>sd</b></td><td>MLX SD 1.5 AI images</td><td>Artistic style</td></tr>
+    <tr><td><b>remotion</b></td><td>React rendering</td><td>Deep customization</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>🚀 Quick Start</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><h3>Install</h3><p><code>bash install.sh</code></p></div>
+    <div class="step"><div class="num">2</div><h3>Config</h3><p>Add DeepSeek API key</p></div>
+    <div class="step"><div class="num">3</div><h3>Avatar</h3><p>Upload a photo, or generate with AI</p></div>
+    <div class="step"><div class="num">4</div><h3>Launch</h3><p><code>bash start_ui.sh</code></p></div>
+    <div class="step"><div class="num">5</div><h3>Generate</h3><p>Topic + Data → Video</p></div>
+  </div>
+  <div class="code-block">$ bash install.sh<br>$ bash start_ui.sh<br>$ open http://127.0.0.1:7860</div>
+</section>
+
+<section>
+  <h2>💻 Platforms</h2>
+  <table>
+    <tr><th>Platform</th><th>Script</th><th>Voice</th><th>Lip Sync</th><th>Cards</th><th>SD</th></tr>
+    <tr><td><b>macOS M1-M4</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td><b>macOS Intel</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+    <tr><td><b>Windows</b></td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
+    <tr><td><b>Linux</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+  </table>
+</section>
+
+</div>
+
+<footer>
+  MIT © <a href="https://github.com/dunso/iAnchor" style="color:#667eea">iAnchor</a>
+</footer>
+
+</body>
+</html>

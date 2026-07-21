@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iAnchor — AI 口播视频生成</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e); color: #e0e0e0; line-height: 1.7; }
+    .hero { text-align: center; padding: 100px 20px 60px; }
+    .hero h1 { font-size: 56px; font-weight: 900; background: linear-gradient(135deg, #667eea, #ffb74d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; }
+    .hero p { font-size: 20px; color: #aaa; max-width: 600px; margin: 0 auto 32px; }
+    .hero .badge { display: inline-block; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 18px; margin: 4px; font-size: 14px; color: #ccc; }
+    .hero .btn { display: inline-block; margin-top: 32px; padding: 14px 36px; font-size: 18px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .hero .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(102,126,234,0.4); }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+    section { padding: 60px 0; }
+    h2 { font-size: 32px; text-align: center; margin-bottom: 40px; color: #ffb74d; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { transform: translateY(-4px); border-color: rgba(102,126,234,0.4); }
+    .card .icon { font-size: 36px; margin-bottom: 12px; }
+    .card h3 { font-size: 18px; margin-bottom: 8px; color: #fff; }
+    .card p { font-size: 14px; color: #999; }
+    .screenshot { text-align: center; margin: 40px 0; }
+    .screenshot img { max-width: 100%; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .pipeline { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 32px 0; }
+    .pipe { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 18px; font-size: 13px; color: #ccc; text-align: center; }
+    .pipe .arrow { color: #667eea; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    th { color: #ffb74d; font-weight: 600; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 32px 0; }
+    .step { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+    .step .num { width: 36px; height: 36px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 8px; }
+    footer { text-align: center; padding: 40px 20px; color: #555; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.05); }
+    code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+    .code-block { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 20px; overflow-x: auto; margin: 16px 0; font-family: "SF Mono", "Fira Code", monospace; font-size: 13px; color: #a8d8a8; }
+  </style>
+</head>
+<body>
+
+<div style="text-align:right;padding:16px 24px 0">
+  <a href="index.html" style="color:#ffb74d;font-weight:700;text-decoration:none;margin-right:12px">中文</a>
+  <a href="index_en.html" style="color:#999;text-decoration:none">English</a>
+</div>
+
+<div class="hero">
+  <h1>🎬 iAnchor</h1>
+  <p><strong>输入主题 + 素材，3 分钟后拿到一条带数字人、字幕、数据卡片的竖屏口播视频。全程 AI 驱动，零剪辑经验。</strong></p>
+  <div>
+    <span class="badge">🍎 macOS M1-M4</span>
+    <span class="badge">🐍 Python 3.13</span>
+    <span class="badge">🤖 DeepSeek LLM</span>
+    <span class="badge">🗣️ Edge TTS</span>
+    <span class="badge">👄 MuseTalk 唇形</span>
+    <span class="badge">🧑 AI 形象生成</span>
+  </div>
+  <a href="https://github.com/dunso/iAnchor" class="btn">⭐ GitHub 仓库</a>
+</div>
+
+<div class="container">
+
+<section>
+  <div class="screenshot">
+    <img src="webui.png" alt="iAnchor WebUI">
+  </div>
+</section>
+
+<section>
+  <h2>✨ 为什么选 iAnchor？</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">✍️</div>
+      <h3>AI 写稿</h3>
+      <p>给个主题 + 数据，LLM 自动扩写成 3 分钟口播稿。云端 API / 本地 Ollama 随心切换。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🗣️</div>
+      <h3>真人级语音</h3>
+      <p>微软 Edge TTS 男声新闻腔，发音自然流畅。16 种音色可选，还能试听。</p>
+    </div>
+    <div class="card">
+      <div class="icon">👄</div>
+      <h3>唇形同步</h3>
+      <p>MuseTalk 音频驱动，嘴型和声音精准对齐，数字人开口说话。</p>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>数据卡片</h3>
+      <p>价格、涨跌幅、成交量随口播自动切换。4 种动画引擎可选：PPT 卡片 / Manim / SD 文生图 / Remotion。</p>
+    </div>
+    <div class="card">
+      <div class="icon">📝</div>
+      <h3>逐句字幕</h3>
+      <p>金黄字体 + 圆角背景 + 按标点拆分。一句一条，自动同步音频。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧑</div>
+      <h3>AI 主播形象</h3>
+      <p>不用找照片，根据文案一键生成高清主播形象。本地 Z-Image-Turbo / 云端 API 双引擎，也支持手动上传。</p>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>全自动</h3>
+      <p>LLM 写稿 → TTS 语音 → 唇形驱动 → 动画卡片 → 字幕合成 → 最终视频。一条命令，全链路自动。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>🔄 工作流</h2>
+  <div class="pipeline">
+    <div class="pipe">📄 主题+素材</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🤖 LLM 写稿</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🧑 AI 形象</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🗣️ TTS 语音</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">👄 唇形驱动</div>
+    <div class="pipe"><span class="arrow">→</span></div>
+    <div class="pipe">🎨 合成视频</div>
+  </div>
+</section>
+
+<section>
+  <h2>🎨 四种动画模式</h2>
+  <table>
+    <tr><th>模式</th><th>效果</th><th>适用场景</th></tr>
+    <tr><td><b>card</b> (默认)</td><td>PPT 卡片，6 种布局轮换</td><td>财经数据播报，价格卡片</td></tr>
+    <tr><td><b>manim</b></td><td>数字滚动 + FadeIn 过渡</td><td>数字动画，高级感</td></tr>
+    <tr><td><b>sd</b></td><td>MLX SD 1.5 AI 生图</td><td>AI 艺术风格，视觉冲击</td></tr>
+    <tr><td><b>remotion</b></td><td>React 组件渲染</td><td>CSS 动画，Chart.js 图表</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>🚀 5 步上手</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><h3>克隆安装</h3><p><code>git clone</code> → <code>bash install.sh</code></p></div>
+    <div class="step"><div class="num">2</div><h3>配置 Key</h3><p>编辑 config.yaml 填入 DeepSeek API Key</p></div>
+    <div class="step"><div class="num">3</div><h3>选形象</h3><p>上传照片，或 AI 一键生成主播形象</p></div>
+    <div class="step"><div class="num">4</div><h3>启动</h3><p><code>bash start_ui.sh</code></p></div>
+    <div class="step"><div class="num">5</div><h3>生成</h3><p>填主题+数据 → 一键出片</p></div>
+  </div>
+  <div class="code-block">$ bash install.sh          # 一键安装<br>$ bash start_ui.sh          # 启动 WebUI<br>$ open http://127.0.0.1:7860</div>
+</section>
+
+<section>
+  <h2>💻 平台支持</h2>
+  <table>
+    <tr><th>平台</th><th>写稿</th><th>语音</th><th>唇形</th><th>动画</th><th>SD</th></tr>
+    <tr><td><b>macOS M1-M4</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td><b>macOS Intel</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+    <tr><td><b>Windows</b></td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>❌</td></tr>
+    <tr><td><b>Linux</b></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+  </table>
+</section>
+
+</div>
+
+<footer>
+  MIT © <a href="https://github.com/dunso/iAnchor" style="color:#667eea">iAnchor</a> — Built with ❤️ for financial content creators
+</footer>
+
+</body>
+</html>
